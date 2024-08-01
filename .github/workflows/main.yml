@@ -1,0 +1,22 @@
+name: Deploy AKS-Construction
+
+on:
+  workflow_dispatch:
+
+permissions:
+      id-token: write
+      contents: read
+
+jobs:
+  reusable_workflow_job:
+    uses: Azure/AKS-Construction/.github/workflows/AKSC_Deploy.yml@0.10.5
+    with:
+      templateVersion: 0.10.5
+      rg: rg-aks-ec-01
+      resourceName: akc-ec-01
+      templateParams: resourceName=akc-ec-01 agentCount=1 upgradeChannel=stable AksPaidSkuForSLA=true agentVMSize=Standard_B4ms nodePoolName=npool01 osDiskType=Managed custom_vnet=true CreateNetworkSecurityGroups=true enable_aad=true AksDisableLocalAccounts=true enableAzureRBAC=true adminPrincipalId=_USER_OBJECT_ID_ registries_sku=Premium acrPushRolePrincipalId=_USER_OBJECT_ID_ omsagent=true retentionInDays=30 azurepolicy=audit availabilityZones=["1","2","3"] authorizedIPRanges=["95.102.116.55/32"] maxPods=10 keyVaultAksCSI=true keyVaultCreate=true keyVaultOfficerRolePrincipalId=_USER_OBJECT_ID_ automationAccountScheduledStartStop=NaN
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      USER_OBJECT_ID: ${{ secrets.USER_OBJECT_ID }}
